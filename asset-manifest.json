@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.bf11fd25.css",
-    "main.js": "/static/js/main.489a9209.js",
-    "static/media/train_icon.png": "/static/media/train_icon.643635eacc33d70031a2.png",
-    "index.html": "/index.html",
-    "main.bf11fd25.css.map": "/static/css/main.bf11fd25.css.map",
-    "main.489a9209.js.map": "/static/js/main.489a9209.js.map"
+    "main.css": "/TrainTracker/static/css/main.bf11fd25.css",
+    "main.js": "/TrainTracker/static/js/main.5603ff3c.js",
+    "static/media/train_icon.png": "/TrainTracker/static/media/train_icon.643635eacc33d70031a2.png",
+    "index.html": "/TrainTracker/index.html",
+    "main.bf11fd25.css.map": "/TrainTracker/static/css/main.bf11fd25.css.map",
+    "main.5603ff3c.js.map": "/TrainTracker/static/js/main.5603ff3c.js.map"
   },
   "entrypoints": [
     "static/css/main.bf11fd25.css",
-    "static/js/main.489a9209.js"
+    "static/js/main.5603ff3c.js"
   ]
 }
