@@ -21,8 +21,11 @@ function fromHex(hexString) {
 const PASSWORD_LENGTH = 88;
 let cryptoParams = null;
 
-async function getTrainsJSONData() {
-    const rawDataBase64 = await fetch("https://maps.amtrak.com/services/MapDataService/trains/getTrainsData")
+const trainsDataURL = "https://maps.amtrak.com/services/MapDataService/trains/getTrainsData";
+const stationsDataURL = "https://maps.amtrak.com/services/MapDataService/stations/trainStations";
+
+async function getDecryptedJSONData(url) {
+    const rawDataBase64 = await fetch(url)
         .then(
             res => res.text()
         );//get raw data
@@ -121,6 +124,10 @@ async function getRoutesJSONData() {
 
 export default {
     async fetch(req, env, ctx) {
+        const successHeaders = {
+            "Content-Type": "text/json",
+            "Access-Control-Allow-Origin": "*"
+        }
         let res = new Response("",{
             status: 404,
             statusText: "not found"
@@ -128,23 +135,24 @@ export default {
         try{
             const page = req.url.split("/").at(-1)
             if (page === "getTrains") {
-                res = new Response(await getTrainsJSONData(), {
+                res = new Response(await getDecryptedJSONData(trainsDataURL), {
                     status: 200,
                     statusText: "",
-                    headers: {
-                        "Content-Type": "text/json",
-                        "Access-Control-Allow-Origin": "*"
-                    }
+                    headers: successHeaders
                 })
             }
             if(page === "getRoutes") {
                 res = new Response(await getRoutesJSONData(), {
                     status: 200,
                     statusText: "",
-                    headers: {
-                        "Content-Type": "text/json",
-                        "Access-Control-Allow-Origin": "*"
-                    }
+                    headers: successHeaders
+                })
+            }
+            if(page === "getStations") {
+                res = new Response(await getDecryptedJSONData(stationsDataURL), {
+                    status: 200,
+                    statusText: "",
+                    headers: successHeaders
                 })
             }
         } catch(err) {

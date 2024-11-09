@@ -1,5 +1,7 @@
 //Client-Side Objects and Functions for reading/manipulating decoded data returned from server
 
+const API_HOST = process.env.REACT_APP_API_HOST;
+
 /**
  * Represents a Station as seen by a Train
  * found in a train's {@link Train.stations} member
@@ -62,14 +64,24 @@ function Train() {
 function APIInstance() {
     this.lastUpdate = null;
     this.trains = null;
+    this.routes = null;
+    this.stations = null;
+
     /**
      * user-defined function gets called when dataset is updated
      */
     this.onUpdated = function(){};
     this.update = function() {
-        getRoutesJSONData().then(data => {
-            this.routes = data;
-        })
+        if(this.routes === null) {
+            getRoutesJSONData().then(data => {
+                this.routes = data;
+            })
+        }
+        if(this.stations === null) {
+            getStationsJSONData().then(data => {
+                this.stations = data;
+            })
+        }
         getTrainList().then(data => {
             this.trains = data;
             this.lastUpdate = Date.now();
@@ -80,13 +92,19 @@ function APIInstance() {
 
 
 async function getTrainsJSONData() {
-    return fetch("https://amtrak-proxy.nick-rehac.workers.dev/getTrains").then(
+    return fetch(API_HOST + "/getTrains").then(
         res => res.json()
     )
 }
 
 async function getRoutesJSONData() {
-    return fetch("https://amtrak-proxy.nick-rehac.workers.dev/getRoutes").then(
+    return fetch(API_HOST + "/getRoutes").then(
+        res => res.json()
+    )
+}
+
+async function getStationsJSONData() {
+    return fetch(API_HOST + "/getStations").then(
         res => res.json()
     )
 }
