@@ -143,7 +143,7 @@ function App() {
                               station={selectedStation} stationChange={handleSelectedStationChange} upcomingOnlyValue={upcomingOnly} upcomingOnlyChange={handleUpcomingOnlyChange}
                       />
                   </div>
-                  <div className='train-list-container'>
+                  <div className='app-train-list-container'>
                       <TrainList className = 'TrainList' trains={currentTrains} handleTrainClick={handleTrainClick}/>
                   </div>
                   <div className='map-container'>
