@@ -1,0 +1,4 @@
+name = "amtrak-proxy"
+main = "server.js"
+compatibility_date = "2024-11-08"
+account_id = "301208bb8e22fe17b4ac6baa241fe11b"

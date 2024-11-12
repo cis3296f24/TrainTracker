@@ -1,0 +1,74 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form input[type="text"] {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 90%;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.form input[type="text"]:focus {
+    border-color: #83bcf9;
+}
+
+.top-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.select-label {
+    font-size: 1.2rem; 
+    color: #222;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem;
+    text-align: left;
+}
+
+.select-box {
+    width: 90%;
+    max-width: 100%;
+}
+
+.form select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.form select:focus {
+    border-color: #83bcf9;
+}
+
+.optional-criteria-label {
+    text-align: left;
+}

@@ -1,0 +1,90 @@
+.train-info {
+    font-family: Arial, sans-serif;
+    color: #333;
+    width: 95%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.route {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.direction {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #34495e;
+    margin: 5px 0;
+}
+
+.ontime {
+    color: green;
+    font-weight: bold;
+}
+
+.late {
+    color: red;
+    font-weight: bold;
+}
+
+.ontime, .late {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 1em;
+}
+
+th {
+    background-color: #2c3e50;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+td {
+    color: #34495e;
+}
+
+td:first-child {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+td.ontime {
+    color: green;
+    font-weight: normal;
+}
+
+td.late {
+    color: red;
+    font-weight: normal;
+}
+
+td.ontime, td.late {
+    font-size: 1em;
+    margin-bottom: 10px;
+}
