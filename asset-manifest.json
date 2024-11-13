@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/TrainTracker/static/css/main.2d6bf2dc.css",
-    "main.js": "/TrainTracker/static/js/main.939c359c.js",
-    "static/media/train_icon.png": "/TrainTracker/static/media/train_icon.643635eacc33d70031a2.png",
-    "index.html": "/TrainTracker/index.html",
-    "main.2d6bf2dc.css.map": "/TrainTracker/static/css/main.2d6bf2dc.css.map",
-    "main.939c359c.js.map": "/TrainTracker/static/js/main.939c359c.js.map"
+    "main.css": "/TrainTracker/train-tracker/static/css/main.2d6bf2dc.css",
+    "main.js": "/TrainTracker/train-tracker/static/js/main.858dd0ac.js",
+    "static/media/train_icon.png": "/TrainTracker/train-tracker/static/media/train_icon.643635eacc33d70031a2.png",
+    "index.html": "/TrainTracker/train-tracker/index.html",
+    "main.2d6bf2dc.css.map": "/TrainTracker/train-tracker/static/css/main.2d6bf2dc.css.map",
+    "main.858dd0ac.js.map": "/TrainTracker/train-tracker/static/js/main.858dd0ac.js.map"
   },
   "entrypoints": [
     "static/css/main.2d6bf2dc.css",
-    "static/js/main.939c359c.js"
+    "static/js/main.858dd0ac.js"
   ]
 }
