@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { APIInstance } from "./AmtrakAPI";
+import {TrainPos} from "./TrainInterpolation"
 import L from "leaflet";
 import { IoTrainOutline } from "react-icons/io5";
 import { renderToString } from "react-dom/server";
@@ -11,6 +11,7 @@ import './styles/Map.css';
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import TrainPin from "./TrainPin";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -27,6 +28,7 @@ const Map = ({trains}) => {
     // const [trainColors, setTrainColors] = useState({}); // Commented out trainColors state
     // const apiInstance = useRef(new APIInstance());
     const mapRef = useRef();
+
 
     useEffect(() => {
         fetch("/TrainTracker/geojson/amtrak-track.geojson")
@@ -87,38 +89,14 @@ const Map = ({trains}) => {
     */
 
     // Apply a static blue color to TrainIcon
-    const TrainIcon = () => (
-        <div className="custom-icon-container" style={{ color: "blue" }}>
-            <IoTrainOutline size={20} />
-        </div>
-    );
 
-    function TrainMarkers() { 
-        console.log(trains);
+
+    function TrainMarkers() {
         if(trains.length !== 0){
             return(
                 <div>
                     {trains.map((train,index) =>
-                        <Marker
-                            key={index}
-                            position={[train.lat, train.lon]}
-                            icon={L.divIcon({
-                                html: renderToString(<TrainIcon />),
-                                className: 'custom-icon',
-                                iconSize: [30, 30],
-                                iconAnchor: [15, 15]
-                            })}
-                        >
-                            <Popup>
-                                <strong>{train.routeName}</strong> - Train #{train.number}
-                                <br />
-                                Speed: {Math.round(train.speed)} mph
-                                <br />
-                                Punctuality: {train.punctuality}
-                                <br />
-                                Last update: {new Date(train.lastUpdate).toLocaleString()}
-                            </Popup>
-                        </Marker>
+                        <TrainPin train={train} key={index} trackData={railLines}/>
                     )}
                 </div>
             )
