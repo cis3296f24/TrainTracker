@@ -20,7 +20,7 @@ function TrainPin({train, trackData, index}) {
         return () => clearInterval(refreshTimer);
     }, [train, trackData])
 
-    let trainColor = position.stationLocked ? "red" : "green";
+    let trainColor = follower.current?.stationLocked ? "red" : "green";
 
     const TrainIcon = () => (
         <div className="custom-icon-container" style={{ color: trainColor }}>

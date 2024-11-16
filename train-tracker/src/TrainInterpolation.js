@@ -20,7 +20,8 @@ function TrainFollower(train, trackData) {
     this.time0 = Date.parse(train.lastUpdate);
     this.estlat = train.lat;
     this.estlon = train.lon;
-    this.currentSegment = 0;
+    this.currentSegment = null;
+    this.nextSegment = null;
     this.accumulatedSegmentMiles = 0;
     this.followForward = true;
     let closestOriginNode = {
@@ -34,17 +35,16 @@ function TrainFollower(train, trackData) {
     };
     this.getLatLon = function() {
         //TODO: consistent train speed
-        //TODO: proper segment transitions
         if(this.stationLocked) {
             return [this.estlat, this.estlon];
         }
 
         const dTime = Date.now() - this.time0;
-        let dMiles = train.speed * dTime/3600000;
+        let dMiles = train.speed * (dTime)/3600000;
 
         //advance to projected segment
         while(dMiles >= this.accumulatedSegmentMiles) {
-            this.currentSegment = this.followForward ? featureByID(trackData, this.currentSegment.properties.TOFRANODE) : previousFeature(trackData,this.currentSegment.FRFRANODE);
+            this.currentSegment = this.nextSegment;
 
             if(this.currentSegment == null) {
                 this.stationLocked = true;
@@ -52,29 +52,48 @@ function TrainFollower(train, trackData) {
             }
 
             this.accumulatedSegmentMiles += this.currentSegment.properties.MILES;
+            this.nextSegment = this.followForward ? featureByID(trackData, this.currentSegment.properties.TOFRANODE) : previousFeature(trackData,this.currentSegment.FRFRANODE);
+            console.log("moved to next segment")
         }
 
         let milesIntoSegment = this.accumulatedSegmentMiles - dMiles;
 
-        let coordFactor = milesIntoSegment * this.currentSegment.geometry.coordinates.length / this.currentSegment.properties.MILES;
-        let coordIndex = Math.floor(coordFactor);
-        let interpolateFactor = coordFactor - coordIndex;
-
         let segmentCoords = this.currentSegment.geometry.coordinates;
 
-        if(coordIndex === segmentCoords.length) coordIndex -= 1;
-        if(this.followForward) {
-            coordIndex = segmentCoords.length - 1 - coordIndex;
-            interpolateFactor = 1.0 - interpolateFactor;
+        let coordFactor = milesIntoSegment / this.currentSegment.properties.MILES;
+
+        let indexFactor = coordFactor * (segmentCoords.length - 1)
+
+
+
+        let fromCoord;
+        let toCoord;
+        let coordIndex;
+        let interpolateFactor;
+
+        if(!this.followForward) {
+            coordIndex = Math.ceil(indexFactor);
+            if(coordIndex === 0) {
+                coordIndex -= 1;
+                return [this.estlat, this.estlon];
+            }
+            fromCoord = segmentCoords[coordIndex];
+            toCoord = segmentCoords[coordIndex - 1];
+            interpolateFactor = coordIndex - indexFactor;
+        } else {
+            coordIndex = Math.floor(segmentCoords.length - indexFactor - 1);
+            if(coordIndex > segmentCoords.length - 1) {
+                coordIndex -= 1;
+                return [this.estlat, this.estlon];
+            }
+            fromCoord = segmentCoords[coordIndex];
+            toCoord = segmentCoords[coordIndex + 1];
+            interpolateFactor = 1 - (indexFactor - Math.floor(indexFactor));
         }
 
-        if(coordIndex+1 !== segmentCoords.length) {
-            this.estlat = segmentCoords[coordIndex][1] * (1 - interpolateFactor) + segmentCoords[coordIndex + 1][1] * interpolateFactor;
-            this.estlon = segmentCoords[coordIndex][0] * (1 - interpolateFactor) + segmentCoords[coordIndex + 1][0] * interpolateFactor;
-        } else {
-            this.estlat = segmentCoords[coordIndex][1];
-            this.estlon = segmentCoords[coordIndex][0];
-        }
+
+        this.estlat = fromCoord[1] * (1 - interpolateFactor) + toCoord[1] * interpolateFactor;
+        this.estlon = fromCoord[0] * (1 - interpolateFactor) + toCoord[0] * interpolateFactor;
 
         return [this.estlat, this.estlon];
     }
@@ -164,6 +183,8 @@ function TrainFollower(train, trackData) {
     if(train.heading.includes("E")) traindx = 1;
 
     this.followForward = trackdx * traindx + trackdy * traindy > 0;
+
+    this.nextSegment = this.followForward ? featureByID(trackData, this.currentSegment.properties.TOFRANODE) : previousFeature(trackData,this.currentSegment.FRFRANODE);
 }
 
 module.exports = {
