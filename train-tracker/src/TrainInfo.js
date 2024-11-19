@@ -1,7 +1,6 @@
 import './styles/TrainInfo.css'
 
 function TrainInfo({train}){
-    console.log(train);
     const renderedStops = train.stations.map((s) => {
         let arrivalStyle = "";
         let departureStyle = "";

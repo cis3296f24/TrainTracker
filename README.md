@@ -40,7 +40,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 # How to contribute
 
-Follow this [project board](https://github.com/orgs/cis3296f24/projects/105/views/1) to know the latest status of the project.
+Follow this [project board](https://github.com/orgs/cis3296f24/projects/105) to know the latest status of the project.
 ## How to build
 
 Use this [github repository](https://github.com/cis3296f24/TrainTracker/)
@@ -55,3 +55,5 @@ Use this [github repository](https://github.com/cis3296f24/TrainTracker/)
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 The train favicon was downloaded from [Train icons created by Smashicons - Flaticon](https://www.flaticon.com/free-icon/train_2855692).
+
+The routes GeoJSON data was downloaded from [The US Department of Transportation](https://data-usdot.opendata.arcgis.com/datasets/usdot::amtrak-routes/explore?location=38%2C-79%2C6.60).
