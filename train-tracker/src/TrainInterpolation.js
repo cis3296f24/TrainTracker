@@ -149,7 +149,11 @@ function TrainFollower(train, trackData) {
     if(closestOriginNode.coordIndex === 0) {
         let prevSegment = previousFeature(trackData, closestOriginNode.segmentID);
         let lastCoordIndex = prevSegment.geometry.coordinates.length - 1;
-        prevCoord = prevSegment.geometry.coordinates[lastCoordIndex];
+        if(prevSegment == null) {
+            prevCoord = currentFeatureCoords[closestOriginNode.coordIndex]
+        } else {
+            prevCoord = prevSegment.geometry.coordinates[lastCoordIndex];
+        }
     } else {
         prevCoord = currentFeatureCoords[closestOriginNode.coordIndex - 1]
     }
