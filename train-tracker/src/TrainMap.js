@@ -96,13 +96,6 @@ const TrainMap = ({trains, userLocation, selectedStation, selectedRoute}) => {
     };
     */
 
-    // Apply a static blue color to TrainIcon
-    const TrainIcon = () => (
-        <div className="custom-icon-container" style={{ color: "blue" }}>
-            <IoTrainOutline size={20} />
-        </div>
-    );
-
     const UserLocationIcon = () => (
         <div className="custom-icon-container" style={{ color: "red" }}>
             <FaLocationDot size={20} />
@@ -210,7 +203,7 @@ const TrainMap = ({trains, userLocation, selectedStation, selectedRoute}) => {
             return(
                 <div>
                     {trains.map((train,index) =>
-                        <TrainPin train={train} key={index} trackData={railLines}/>
+                        <TrainPin train={train} index={index} trackData={railLines}/>
                     )}
                 </div>
             )

@@ -5,7 +5,7 @@ import {Marker, Popup} from "react-leaflet";
 import React, {useState, useRef, useEffect} from "react";
 import {IoTrainOutline} from "react-icons/io5";
 
-const MARKER_ANIM_INTERVAL_MS = 250
+const MARKER_ANIM_INTERVAL_MS = 100
 
 function TrainPin({train, trackData, index}) {
     const [position, setPosition] = useState([train.lat, train.lon]);
@@ -20,10 +20,8 @@ function TrainPin({train, trackData, index}) {
         return () => clearInterval(refreshTimer);
     }, [train, trackData])
 
-    let trainColor = follower.current?.stationLocked ? "red" : "green";
-
     const TrainIcon = () => (
-        <div className="custom-icon-container" style={{ color: trainColor }}>
+        <div className="custom-icon-container" style={{ color: "blue" }}>
             <IoTrainOutline size={20} />
         </div>
     );
