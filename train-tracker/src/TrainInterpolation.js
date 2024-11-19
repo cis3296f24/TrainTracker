@@ -14,15 +14,20 @@ function previousFeature(trackData, node) {
 }
 
 function TrainFollower(train, trackData) {
-    const MILES_PER_DEGREE = 1/69;
+    const MILES_PER_DEGREE = 69;
     this.train = train;
     this.stationLocked = false;
     this.time0 = Date.parse(train.lastUpdate);
-    this.estlat = train.lat;
-    this.estlon = train.lon;
+    this.estlat = train.lat ?? 0;
+    this.estlon = train.lon ?? 0;
     this.currentSegment = null;
     this.nextSegment = null;
+    this.fromCoordIndex = -1;
+    this.fromCoord = null;
+    this.toCoord = null;
+    this.coordMiles = 0;
     this.accumulatedSegmentMiles = 0;
+    this.accumulatedCoordMiles = 0;
     this.followForward = true;
     let closestOriginNode = {
         distance: Number.POSITIVE_INFINITY,
@@ -54,46 +59,44 @@ function TrainFollower(train, trackData) {
             this.accumulatedSegmentMiles += this.currentSegment.properties.MILES;
             this.nextSegment = this.followForward ? featureByID(trackData, this.currentSegment.properties.TOFRANODE) : previousFeature(trackData,this.currentSegment.FRFRANODE);
             console.log("moved to next segment")
+            this.accumulatedCoordMiles = 0;
+            this.fromCoordIndex = -1;
+            this.coordMiles = 0;
         }
-
-        let milesIntoSegment = this.accumulatedSegmentMiles - dMiles;
 
         let segmentCoords = this.currentSegment.geometry.coordinates;
 
-        let coordFactor = milesIntoSegment / this.currentSegment.properties.MILES;
+        if(this.fromCoordIndex === -1) {
+            this.fromCoordIndex = this.followForward ? -1 : segmentCoords.length;
+        }
 
-        let indexFactor = coordFactor * (segmentCoords.length - 1)
+        const milesIntoSegment = this.currentSegment.properties.MILES - (this.accumulatedSegmentMiles - dMiles);
 
-
-
-        let fromCoord;
-        let toCoord;
-        let coordIndex;
-        let interpolateFactor;
-
-        if(!this.followForward) {
-            coordIndex = Math.ceil(indexFactor);
-            if(coordIndex === 0) {
-                coordIndex -= 1;
-                return [this.estlat, this.estlon];
+        //advance to projected fromCoordIndex
+        while(milesIntoSegment >= this.accumulatedCoordMiles) {
+            if(this.followForward) {
+                if(this.fromCoordIndex >= segmentCoords.length - 2) {
+                    return [this.estlat, this.estlon];
+                }
+                this.fromCoordIndex += 1;
+                this.toCoord = segmentCoords[this.fromCoordIndex + 1];
+            } else {
+                if(this.fromCoordIndex <= 2) {
+                    return [this.estlat, this.estlon];
+                }
+                this.fromCoordIndex -= 1;
+                this.toCoord = segmentCoords[this.fromCoordIndex - 1];
             }
-            fromCoord = segmentCoords[coordIndex];
-            toCoord = segmentCoords[coordIndex - 1];
-            interpolateFactor = coordIndex - indexFactor;
-        } else {
-            coordIndex = Math.floor(segmentCoords.length - indexFactor - 1);
-            if(coordIndex > segmentCoords.length - 1) {
-                coordIndex -= 1;
-                return [this.estlat, this.estlon];
-            }
-            fromCoord = segmentCoords[coordIndex];
-            toCoord = segmentCoords[coordIndex + 1];
-            interpolateFactor = 1 - (indexFactor - Math.floor(indexFactor));
+            this.fromCoord = segmentCoords[this.fromCoordIndex];
+            this.coordMiles = dist(this.fromCoord, this.toCoord)*MILES_PER_DEGREE;
+            this.accumulatedCoordMiles += this.coordMiles;
         }
 
 
-        this.estlat = fromCoord[1] * (1 - interpolateFactor) + toCoord[1] * interpolateFactor;
-        this.estlon = fromCoord[0] * (1 - interpolateFactor) + toCoord[0] * interpolateFactor;
+        let interpolateFactor = 1 - (this.accumulatedCoordMiles - milesIntoSegment) / this.coordMiles;
+
+        this.estlat = this.fromCoord[1] * (1 - interpolateFactor) + this.toCoord[1] * interpolateFactor;
+        this.estlon = this.fromCoord[0] * (1 - interpolateFactor) + this.toCoord[0] * interpolateFactor;
 
         return [this.estlat, this.estlon];
     }
@@ -103,7 +106,7 @@ function TrainFollower(train, trackData) {
         return;
     }
 
-    const CULLING_THRESHOLD = 5 * MILES_PER_DEGREE;//search only within 5 miles of train
+    const CULLING_THRESHOLD = 5 / MILES_PER_DEGREE;//search only within 5 miles of train
 
     //TODO: detect proximity to stations
     let closeToStation = false;
@@ -148,10 +151,10 @@ function TrainFollower(train, trackData) {
     let nextCoord;
     if(closestOriginNode.coordIndex === 0) {
         let prevSegment = previousFeature(trackData, closestOriginNode.segmentID);
-        let lastCoordIndex = prevSegment.geometry.coordinates.length - 1;
         if(prevSegment == null) {
             prevCoord = currentFeatureCoords[closestOriginNode.coordIndex]
         } else {
+            let lastCoordIndex = prevSegment.geometry.coordinates.length - 1;
             prevCoord = prevSegment.geometry.coordinates[lastCoordIndex];
         }
     } else {
