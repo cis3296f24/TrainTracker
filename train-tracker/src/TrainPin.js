@@ -34,6 +34,10 @@ function TrainPin({train, trackData, index}) {
             iconSize: [30, 30],
             iconAnchor: [15, 15]
         })}
+        eventHandlers={{
+            mouseover: (event) => event.target.openPopup(),
+            mouseout: (event) => event.target.closePopup()
+        }}
     >
         <Popup>
             <strong>{train.routeName}</strong> - Train #{train.number}
