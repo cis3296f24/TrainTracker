@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/TrainTracker/static/css/main.8fd8692b.css",
-    "main.js": "/TrainTracker/static/js/main.33e9e579.js",
+    "main.js": "/TrainTracker/static/js/main.e047a1f4.js",
     "static/media/train_icon.png": "/TrainTracker/static/media/train_icon.643635eacc33d70031a2.png",
     "index.html": "/TrainTracker/index.html",
     "main.8fd8692b.css.map": "/TrainTracker/static/css/main.8fd8692b.css.map",
-    "main.33e9e579.js.map": "/TrainTracker/static/js/main.33e9e579.js.map"
+    "main.e047a1f4.js.map": "/TrainTracker/static/js/main.e047a1f4.js.map"
   },
   "entrypoints": [
     "static/css/main.8fd8692b.css",
-    "static/js/main.33e9e579.js"
+    "static/js/main.e047a1f4.js"
   ]
 }
