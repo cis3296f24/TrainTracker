@@ -26,6 +26,7 @@ L.Icon.Default.mergeOptions({
 
 const TrainMap = ({trains, userLocation, selectedStation, selectedFromStation, selectedToStation, selectedRoute}) => {
     const [routes, setRoutes] = useState(null);
+    const [railLines, setRailLines] = useState(null);
     const mapRef = useRef();
     
 
@@ -34,6 +35,10 @@ const TrainMap = ({trains, userLocation, selectedStation, selectedFromStation, s
         fetch("/TrainTracker/geojson/NTAD_Amtrak_Routes_flipped.json")
             .then(response => response.json())
             .then(data => setRoutes(data));
+
+        fetch("/TrainTracker/geojson/amtrak-track.geojson")
+            .then(response => response.json())
+            .then(data => setRailLines(data));
 
         const handleResize = () => {
             if (mapRef.current) {
