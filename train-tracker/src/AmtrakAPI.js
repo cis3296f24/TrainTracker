@@ -137,7 +137,7 @@ function APIInstance() {
     }
 
     this.getStationInfo = function(stationCode) {
-        return this.stations.find(station => station.Code === stationCode);
+        return this.stations.find(station => station.stationCode === stationCode).name;
     }
 }
 

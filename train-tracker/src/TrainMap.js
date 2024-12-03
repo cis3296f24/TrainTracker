@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import {TrainPos} from "./TrainInterpolation"
 import L from "leaflet";
 import { IoTrainOutline } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
@@ -13,6 +14,7 @@ import './styles/Map.css';
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import TrainPin from "./TrainPin";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -24,6 +26,7 @@ L.Icon.Default.mergeOptions({
 
 const TrainMap = ({trains, userLocation, selectedStation, selectedFromStation, selectedToStation, selectedRoute}) => {
     const [routes, setRoutes] = useState(null);
+    const [railLines, setRailLines] = useState(null);
     const mapRef = useRef();
     
 
@@ -32,6 +35,10 @@ const TrainMap = ({trains, userLocation, selectedStation, selectedFromStation, s
         fetch("/TrainTracker/geojson/NTAD_Amtrak_Routes_flipped.json")
             .then(response => response.json())
             .then(data => setRoutes(data));
+
+        fetch("/TrainTracker/geojson/amtrak-track.geojson")
+            .then(response => response.json())
+            .then(data => setRailLines(data));
 
         const handleResize = () => {
             if (mapRef.current) {
@@ -54,13 +61,6 @@ const TrainMap = ({trains, userLocation, selectedStation, selectedFromStation, s
         return color;
     };
     */
-
-    // Apply a static blue color to TrainIcon
-    const TrainIcon = () => (
-        <div className="custom-icon-container" style={{ color: "blue" }}>
-            <IoTrainOutline size={20} />
-        </div>
-    );
 
     const UserLocationIcon = () => (
         <div className="custom-icon-container" style={{ color: "red" }}>
@@ -145,7 +145,7 @@ const TrainMap = ({trains, userLocation, selectedStation, selectedFromStation, s
                 else{
                     routesToDisplay = routes.features.filter((feature) => feature.properties.name === selectedRoute)
                 }
-                
+
             }
             if (routesToDisplay){
                 return (<div>
@@ -155,40 +155,21 @@ const TrainMap = ({trains, userLocation, selectedStation, selectedFromStation, s
                                 {feature.properties.name}
                             </Popup>}
                         </Polyline>)
-                    })} 
+                    })}
                 </div>)
-            }     
+            }
         }
         else{
             return <div></div>
         }
     }
 
-    function TrainMarkers() { 
+    function TrainMarkers() {
         if(trains.length !== 0){
             return(
                 <div>
                     {trains.map((train,index) =>
-                        <Marker
-                            key={index}
-                            position={[train.lat, train.lon]}
-                            icon={L.divIcon({
-                                html: renderToString(<TrainIcon />),
-                                className: 'custom-icon',
-                                iconSize: [30, 30],
-                                iconAnchor: [15, 15]
-                            })}
-                        >
-                            <Popup>
-                                <strong>{train.routeName}</strong> - Train #{train.number}
-                                <br />
-                                Speed: {Math.round(train.speed)} mph
-                                <br />
-                                Punctuality: {train.punctuality}
-                                <br />
-                                Last update: {new Date(train.lastUpdate).toLocaleString()}
-                            </Popup>
-                        </Marker>
+                        <TrainPin train={train} index={index} trackData={railLines}/>
                     )}
                 </div>
             )
