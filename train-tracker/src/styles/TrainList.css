@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: flex-start;
   height: 100%;
-  overflow-x: scroll;
 }
 
 .train-list {
@@ -27,13 +26,12 @@
 }
 
 .train-list th {
-  /* background-color: white; */
   color: white;
   font-size: .65em;
 }
 
 .train-list tbody tr:hover {
-    border: 5px solid #97ccf0;
+    background-color: #97ccf0;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }

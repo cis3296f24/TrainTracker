@@ -1,6 +1,6 @@
-const LOCAL_CACHE="LOCAL_CACHE"
+const LOCAL_CACHE="LOCAL"
 
-const getLocalCache=()=>{
+export const getLocalCache=()=>{
 
     let localCache={
         data:{},
@@ -20,15 +20,35 @@ const getLocalCache=()=>{
     return localCache
 }
 
-export const setToCache=(selectedRoute, selectedNumber, selectedStation)=>{
+export const removeRouteFromCache=(selectedRoute)=>{
+    if (selectedRoute === ""){
+        alert("No route selected");
+        return 1;
+    }
+    const localCache=getLocalCache()
+    let data=localCache.data
+    delete data[selectedRoute]
+    try{
+        localStorage.setItem(LOCAL_CACHE,JSON.stringify(localCache))
+    }
+    catch(e){
+        alert("Unable to remove from Favorites");
+        return 1;
+    }
+    return 0;
+}
+
+export const setRouteToCache=(selectedRoute)=>{
+    if (selectedRoute === ""){
+        alert("No route selected");
+        return 1;
+    }
 
     const localCache=getLocalCache()
     let data=localCache.data
 
     const item={
         route:selectedRoute,
-        number: selectedNumber,
-        station: selectedStation
     }
 
     data[selectedRoute]=item
@@ -38,14 +58,17 @@ export const setToCache=(selectedRoute, selectedNumber, selectedStation)=>{
     }
     catch(e){
         alert("Unable to Save to Favorites");
+        return 1;
     }
+    return 0;
 
 }
 
-// const confirmCheckIn = (username, password) =>{
-//     const localUser = localStorage.getItem("USERNAME");
-//     const localPass = localStorage.getItem("PASSWORD");
-//     if(localUser===null||localPass===null){
-//         alert("No current user detected for this device, please sign in or create a new account");
-//     }
-// }
+export const isFavorited=(routeName)=>{
+    const localCache = getLocalCache();
+    const data = localCache.data;
+    if(routeName in data){
+        return true;
+    }
+    return false;
+}

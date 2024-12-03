@@ -4,6 +4,7 @@ import './styles/TrainPopup.css'
 import TrainInfo from "./TrainInfo";
 
 function TrainPopup({onClose, children, actionBar, train}){
+
     useEffect(() => {
         document.body.classList.add('overflow-hidden');
 
@@ -11,6 +12,7 @@ function TrainPopup({onClose, children, actionBar, train}){
             document.body.classList.remove('overflow-hidden');
         };
     }, []);
+
 
     return ReactDOM.createPortal(<div>
         <div onClick={onClose} className='overlay' ></div> 

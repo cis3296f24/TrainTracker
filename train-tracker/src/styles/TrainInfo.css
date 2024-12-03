@@ -2,11 +2,13 @@
     font-family: Arial, sans-serif;
     color: #333;
     width: 95%;
+    height: 90vh;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
+    overflow: scroll;
 }
 
 .route {
@@ -40,9 +42,12 @@
     margin-bottom: 10px;
 }
 
-table {
+.train-table {
     width: 100%;
     border-collapse: collapse;
+    max-height: 80vh;
+    margin-bottom: 30px;
+    overflow: scroll;
 }
 
 th, td {
@@ -80,3 +85,12 @@ td.ontime, td.late {
     font-size: 1em;
     margin-bottom: 10px;
 }
+
+.copy-button {
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.copy-button:hover {
+    color: #007bff;
+  }

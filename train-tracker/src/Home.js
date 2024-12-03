@@ -1,30 +1,15 @@
 import './styles/Home.css';
 import React, {useState} from 'react'
-
-import {convertStationCodeToStation} from './functionality/app.js';
-
-import TrainMap from './TrainMap';
 import TrainList from './TrainList';
 import Search from './Search';
 import TrainPopup from './TrainPopup';
 
-import {filterTrains} from './functionality/app.js'
-
 import { IoClose } from "react-icons/io5";
 
-function Home({allTrains, allRoutes, allStations, userLocation, selectedStation, setSelectedStation, selectedRoute, setSelectedRoute}){
-    // sorted trains
-    const [currentTrains, setCurrentTrains] = useState([]);
-
-    // popup modal
+function Home({allRoutes, allStations, setRefresh, currentTrains, globalSearchObject, setGlobalSearchObject
+}){
     const [selectedTrain, setSelectedTrain] = useState({});
     const [showModal, setShowModal] = useState(false);
-
-    const searchTrains = (selectedNumber, selectedRoute, selectedStation, upcoming, fromStation, toStation) => {
-        let trains = filterTrains(allTrains, selectedNumber, selectedRoute, selectedStation, upcoming, fromStation, toStation);
-
-        setCurrentTrains(trains);
-    }
 
     const getStationOptions = () => {
         let renderedStations = allStations.map(station => {
@@ -42,7 +27,6 @@ function Home({allTrains, allRoutes, allStations, userLocation, selectedStation,
         return renderedRoutes;
     }
 
-    // Modal Functions
     function handleTrainClick(train){
         setShowModal(true);
         setSelectedTrain(train);
@@ -63,25 +47,15 @@ function Home({allTrains, allRoutes, allStations, userLocation, selectedStation,
               <Search className='Search'
                 routes = {getRouteOptions()}
                 stations = {getStationOptions()}
-                searchFun = {searchTrains}
-                setSelectedStation={setSelectedStation}
-                selectedStation={selectedStation}
-                selectedRoute={selectedRoute}
-                setSelectedRoute={setSelectedRoute}
+                setRefreshState={setRefresh}
+                globalSearchObject={globalSearchObject}
+                setGlobalSearchObject={setGlobalSearchObject}
               />
               </div>
               <div className='app-train-list-container'>
                 <TrainList className = 'TrainList' 
-                    trains={currentTrains} 
-                    handleTrainClick={handleTrainClick}
-                />
-              </div>
-              <div className='map-container'>
-                <TrainMap className = 'Map' 
                     trains={currentTrains}
-                    userLocation={userLocation}
-                    selectedStation={convertStationCodeToStation(allStations, selectedStation)}
-                    selectedRoute={selectedRoute}
+                    handleTrainClick={handleTrainClick}
                 />
               </div>
               <div>
